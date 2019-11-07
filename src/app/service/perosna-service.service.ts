@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Persona } from '../model/persona';
+import { Endpoints } from '../utils/endpoints';
 
 
 
@@ -9,13 +10,40 @@ import { Persona } from '../model/persona';
   providedIn: 'root'
 })
 export class PerosnaServiceService {
-  
-  endPoint = 'http://localhost:8080/personas/personas';
+
+  header = new HttpHeaders({'Content-type': 'application/json'});
 
   constructor(private client: HttpClient) { }
 
-  listarEmpleados(): Observable<Persona[]>{
-    return this.client.get<Persona[]>(this.endPoint);
+  listarPersonas(): Observable<Persona[]> {
+    return this.client.get<Persona[]>(Endpoints.LISTAR.concat('s'));
   }
+
+  listarPersonaId(id: number): Observable<Persona> {
+    return this.client.get<Persona>(Endpoints.LISTAR.concat('/').concat(id.toString()));
+  }
+
+  listarPersonaNroDocumento(nroDocumento: string): Observable<Persona> {
+    return this.client.get<Persona>(Endpoints.LISTAR.concat('/documento/').concat(nroDocumento));
+  }
+
+  borrarPersona(id: number): Observable<void> {
+    return this.client.delete<void>(Endpoints.ELIMINAR.concat('/').concat(id.toString()));
+  }
+
+  registrarPersona(persona: Persona): Observable<Persona> {
+    return this.client.post<Persona>(Endpoints.INSERTAR,
+      persona,
+      {headers: this.header}
+      );
+  }
+
+  actualizarPersona(persona: Persona): Observable<Persona> {
+    return this.client.put<Persona>(
+      Endpoints.ELIMINAR + '/' + persona.id,
+      persona
+      );
+  }
+
 
 }

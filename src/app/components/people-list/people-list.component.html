@@ -1,38 +1,73 @@
-<div class="card">
-    <div class="card-header">
-        <a [routerLink]="['/people-register']" class="btn btn-primary">Registrar persona</a>
-    </div>
-    <div class="card-body">
-        <blockquote class="blockquote mb-0">
-            <p>Personas</p>
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellidos</th>
-                        <th scope="col">Teléfono</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let persona of personas">
-                        <th scope="row">{{persona.id}}</th>
-                        <td>{{persona.nombre}}</td>
-                        <td>{{persona.apellido}}</td>
-                        <td>{{persona.telefono}}</td>
-                        <td><a href="#" class="btn btn-primary btn-lg">Editar</a>
-                            <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#myModal">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+<div>
+    <div class="card">
+        <div class="card-header">
+            <a [routerLink]="['/people-register']" class="btn btn-primary">Registrar persona</a>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <div class="input-group col-6 mx-auto" id="search-bar">
+                    <div class="input-group-append" data-toggle="tooltip" data-placement="bottom"
+                        title="Filtrar Búsqueda">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filtrar por:{{filterTag}}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" data-toggle="tooltip" data-placement="bottom" title="Buscar por id"
+                                (click)="findById()">Id</a>
+                            <a class="dropdown-item" data-toggle="tooltip" data-placement="bottom"
+                                title="Buscar por número de documento" (click)="findByNroDocumento()">Numero de
+                                Documento</a>
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" id="search-input-lg" placeholder="Buscar..."
+                        aria-label="Buscar" aria-describedby="button-addon2" name="searchValue"
+                        [(ngModel)]="searchValue">
+                    <div *ngIf="closeShow" id="close" class="input-group-append">
+                        <button type="button" class="close mx-2" aria-label="Close" (click)="listarPersonas(); searchValue = ''; closeShow = false">
+                            <span id="close-btn" aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="input-group-append" data-toggle="tooltip" data-placement="bottom" title="Buscar">
+                        <button class="btn btn-primary" type="button" id="buscar" (click)="buscar(searchValue)">
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+                <p>Personas</p>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Numero Documento</th>
+                            <th scope="col">Fecha Nacimiento</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let persona of personas">
+                            <th scope="row">{{persona.id}}</th>
+                            <td>{{persona.nombre}}</td>
+                            <td>{{persona.apellido}}</td>
+                            <td>{{persona.nroDocumento}}</td>
+                            <td>{{persona.fechaNacimiento}}</td>
+                            <td>{{persona.telefono}}</td>
+                            <td><button type="button" class="btn btn-primary btn-lg"
+                                    (click)="getPersonaEditar(persona)">Editar</button>
+                                <button type="button" class="btn btn-danger btn-lg" data-toggle="modal"
+                                    data-target="#myModal" (click)="savePersonaModal(persona)">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-        </blockquote>
+            </blockquote>
+        </div>
     </div>
 </div>
-
-
 
 <!-- The Modal -->
 <div class="modal fade" id="myModal">
@@ -47,12 +82,14 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                ¿Está seguro que desea eliminar la información?
+                ¿Está seguro que desea eliminar la información de {{personaSeleccionada.nombre}}
+                {{personaSeleccionada.apellido}}?
             </div>
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="borrarPersona(personaSeleccionada.id)">Aceptar</button>
             </div>
 
         </div>

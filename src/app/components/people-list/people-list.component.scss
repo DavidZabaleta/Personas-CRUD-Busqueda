@@ -1,0 +1,23 @@
+.btn-primary:focus, .btn-primary.focus,
+.btn-secondary:focus, .btn-secondary.focus,
+.dropdown-menu:focus, .dropdown-menu.focus,
+.form-control:focus, .form-control.focus {
+    box-shadow: none;
+}
+
+a{
+    cursor: pointer;
+}
+
+#close{
+    border: 1px solid #ced4da;
+    border-left-color: transparent;
+}
+
+#close-btn{
+    vertical-align: text-top;
+}
+
+.input-group>.form-control{
+    border-right-color: transparent;
+}
